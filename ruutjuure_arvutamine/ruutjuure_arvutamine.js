@@ -200,7 +200,7 @@ function write_texts(){
   // MathQuill_v6rrand.parent(tex_v6rrand)
   // MathQuill_v6rrand.style("width: 80%; float: right; font-size: 24px; margin: 30px auto;");
   
-  MathQuill_v6rrand.style(" width: 80%; margin-top: 70px auto; font-size: 24px;")
+  MathQuill_v6rrand.style(" width: 80%; margin-top: 70px auto; font-size: 24px")
   MathQuill_v6rrand.position(width/asukoha_nr+0,height/asukoha_nr+190);
   
   yl_text=createP("");
