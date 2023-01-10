@@ -236,7 +236,7 @@ function Kontroll(){
     tulemus.html("Korras!");
     tulemus.style("color","green");
     KONTROLL_NUPP.attribute("disabled","");
-    
+    oige_vastus=oige_vastus+1;
   } else if (  (INPUT_x1.value()==X1 || INPUT_x2.value()==X1 || INPUT_x2.value()==X2 || INPUT_x1.value()==X2 ) && ( (INPUT_x1.value()!=X1 || INPUT_x2.value()!=X1 || INPUT_x2.value()!=X2 || INPUT_x1.value()!=X2 )) ){
     tulemus.html("Üks lahenditest ei sobi!");
     tulemus.style("color","orange");
@@ -318,6 +318,9 @@ function Lopp(){
   KONTROLL_NUPP.attribute("disabled","");
   RESET_NUPP.attribute("disabled","");
   LOPETA_NUPP.attribute("disabled","");
+  x1_text.html("");
+  x2_text.html("");
+  
   
   tex_vorrand.remove();
   yl_text.remove();
