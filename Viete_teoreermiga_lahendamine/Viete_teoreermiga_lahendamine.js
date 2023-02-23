@@ -30,7 +30,7 @@ function setup() {
 
 function draw() {
   clear();
-  background(230,245,255);
+  background(251,253,255);
   
   yl_text.position(width/asukoha_nr,height/asukoha_nr);
   tex_vorrand.position(width/asukoha_nr+0,height/asukoha_nr+60)
