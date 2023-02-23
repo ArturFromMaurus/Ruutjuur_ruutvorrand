@@ -30,7 +30,7 @@ function setup() {
 
 function draw() {
   clear();
-  background(230,245,255);
+  background(251,253,255);
   
   yl_text.position(width/asukoha_nr,height/asukoha_nr);
   tex_vorrand1.position(width/asukoha_nr+0,height/asukoha_nr+180);
@@ -111,7 +111,7 @@ function Ylesanne(){
         X1=nullkohad(a,b,c)[0];
         X2=nullkohad(a,b,c)[1];
         if (Number.isInteger(X1) && Number.isInteger(X2) ){
-          break;
+          break
         }
       }
       ruutliige=str(a)+"x^{2}";
@@ -195,7 +195,10 @@ if (INPUT_x1.value()=="" || INPUT_x2.value()==""){
     tulemus.html("Korras!");
     tulemus.style("color","green");
     KONTROLL_NUPP.attribute("disabled","");
-    oige_vastus=oige_vastus+1;
+    
+  }else {
+    tulemus.html("Midagi on valesti.");
+    tulemus.style("color","red");
   }
 
 }
@@ -273,8 +276,6 @@ function Lopp(){
   KONTROLL_NUPP.attribute("disabled","");
   RESET_NUPP.attribute("disabled","");
   LOPETA_NUPP.attribute("disabled","");
-  x1_text.html("");
-  x2_text.html("");
   
   tex_vorrand1.remove();
   tex_vorrand2.remove();
