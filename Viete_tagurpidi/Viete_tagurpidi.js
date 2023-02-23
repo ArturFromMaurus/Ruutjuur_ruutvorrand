@@ -273,7 +273,9 @@ function Reset(){
 
 function Lopp(){
 
-  
+  x1_text.remove();
+  x2_text.remove();
+
   KONTROLL_NUPP.attribute("disabled","");
   RESET_NUPP.attribute("disabled","");
   LOPETA_NUPP.attribute("disabled","");
