@@ -657,6 +657,8 @@ function L6pp(){
   yl_text.remove();
   tulemus.remove();
   
+  infoNupp.remove();
+
   RESET_NUPP.remove();
   L6PETA_NUPP.remove();
   KONTROLL_NUPP.remove();
