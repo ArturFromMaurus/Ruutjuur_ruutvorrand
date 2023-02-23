@@ -9,6 +9,88 @@ var asukoha_nr=10;
 var ylesannete_loendur=0;
 var oige_vastus=0;
 var l6petamise_tingimus=false;
+var alt_vastused=[];
+var vastused_korras=false;
+
+
+
+
+// ----------------------------------------- MATHQUILL KRAAM-----------------------------------------
+var MQ = MathQuill.getInterface(2);
+var answerSpan = document.getElementById('answer');
+answerSpan.style.backgroundColor="white";
+answerSpan.style.width="10px"
+var latexSpan = document.getElementById('lihtsam');
+var latexTEXT = document.getElementById('latex');
+var answerMathField = MQ.MathField(answerSpan, {
+                handlers: {
+                edit: function() {
+                    var enteredMath = answerMathField.latex();
+                    latexSpan.textContent = answerMathField.text()// Get entered math in LaTeX format   
+                    latexTEXT.textContent=answerMathField.latex();
+                }
+                }
+            });
+// ----------------------------------------- MATHQUILL KRAAM-----------------------------------------
+
+
+
+// ----------------------------------------- HTML ToolTip -------------------------------------------
+
+var tooltip = document.createElement("div");
+tooltip.style.backgroundColor = "rgba(9,9,96,0.95)"
+tooltip.style.color = "white";
+tooltip.style.borderRadius="25px";
+tooltip.style.padding = "10px";
+tooltip.style.position = "absolute";
+tooltip.style.display = "none";
+tooltip.style.zIndex="1";
+tooltip.style.border="solid 2px black";
+tooltip.style.width="540px"
+document.body.appendChild(tooltip);
+
+var regularText = document.createElement("div");
+regularText.innerHTML = "Kui arv ei ole ilusti juuritav, siis jaota juurealune teguriteks. Tegurite seast peaks üks tegur olema kindlasti juuritav. Õigeks loetakse sellist vastust, kus juure alune arv ei ole enam tegurduv.<br><br>Ruutjuure sümboli sisestamiseks kasuta ruutjuure nupu või trükki tekstivälja \\sqrt ning vajuta tühikut või enterit. Murrujoone sisestamiseks kasuta / (kaldkriips) sümbolit.<br><br>";
+regularText.style.fontFamily="Computer Modern";
+regularText.style.fontSize="20px";
+tooltip.appendChild(regularText);
+
+KaTeX_EQ="\\text{Näiteks. Ruutjuure } \\sqrt{96} \\text{ täpne väärtus: } \\sqrt{96}=\\sqrt{16 \\cdot 6}=4 \\sqrt{6}"
+var katexEquation = document.createElement("div");
+tooltip.appendChild(katexEquation);
+
+
+// Info nuppu funktsionaalsus
+var infoNupp = document.createElement("button");
+infoNupp.innerHTML = "i";
+infoNupp.style.position = "absolute";
+infoNupp.style.margin="20px";
+infoNupp.style.padding="5px 12px";
+infoNupp.style.fontSize="20px";
+infoNupp.style.fontWeight="bold";
+infoNupp.style.fontFamily="Hoefler Text";
+infoNupp.style.fontStyle="italic";
+infoNupp.style.background="transparent";
+infoNupp.style.border="solid 2px black";
+infoNupp.style.borderRadius="50%";
+document.body.appendChild(infoNupp);
+
+infoNupp.addEventListener("mouseenter", function() {
+  tooltip.style.left = (infoNupp.offsetLeft + infoNupp.offsetWidth) + "px";
+  tooltip.style.top = (infoNupp.offsetTop + infoNupp.offsetHeight) + "px";
+  infoNupp.style.background="darkgrey"
+  tooltip.style.display = "block";
+});
+
+infoNupp.addEventListener("mouseleave", function() {
+  tooltip.style.display = "none";
+  infoNupp.style.background="transparent"
+});
+
+// ----------------------------------------- HTML ToolTip -------------------------------------------
+
+
+
 
 function windowResized() {
   resizeCanvas(windowWidth, 550, WEBGL);
@@ -31,7 +113,10 @@ function setup() {
 
 function draw() {
   
-  background(230,245,255);
+  clear();
+  background(251,253,255);
+  
+  katex.render(KaTeX_EQ, katexEquation);
   
   yl_text.position(width/asukoha_nr,height/asukoha_nr);
   MathQuill_v6rrand.position(width/asukoha_nr+0,height/asukoha_nr+140);
@@ -93,6 +178,7 @@ function Reset(){
     EI_SAA_ARVUTADA.remove();
   }
   
+  vastused_korras=false;
   Ylesanne();
   tulemus.html("");
   
@@ -166,11 +252,12 @@ function Ylesanne(){
   mudel=["1","2","3","4","5","6","7","8"];
   mudeli_valik=random(mudel);
   //console.log(mudeli_valik);
- 
+  alt_vastused=[];
   
   // Korrutamine ilusa vastusega (juured koos)
   if (mudeli_valik=="1"){
       
+      alt_vastused=[];
       arv1=int(random(0,6));
       arv2=int(random(0,6));
       mark1=random([1,1,1,1,1,1,1,-1]); // Miinuse esinemise tõenäosus on 12.5% iga arvu jaoks
@@ -179,10 +266,13 @@ function Ylesanne(){
       arv2_juure_all=mark2*arv2*arv2;
       if (arv1_juure_all*arv2_juure_all<0){
         vastus="-"; // EI SAA JAGADA "vastus"
+        alt_vastused.push(vastus);
       } else if (arv1_juure_all*arv2_juure_all==0){
         vastus="0";
+        alt_vastused.push(vastus);
       } else if (arv1_juure_all*arv2_juure_all>0){
         vastus=str(arv1*arv2);
+        alt_vastused.push(vastus);
       }
     
       if (arv1_juure_all<0){
@@ -193,14 +283,14 @@ function Ylesanne(){
       }
       
       antav_ylesanne="\\sqrt{"+ str(arv1_juure_all)+ "\\cdot"+ str(arv2_juure_all)+"}"
-      vastus_kontrolliks=vastus;
-      console.log(vastus_kontrolliks)
+      console.log(alt_vastused);
   }
   
   
     // Korrutamine ilusa vastusega (juured eraldi)
   if (mudeli_valik=="2"){
       
+      alt_vastused=[];
       arv1=int(random(0,6));
       arv2=int(random(0,6));
       mark1=random([1,1,1,1,1,1,1,-1]); // Miinuse esinemise tõenäosus on 12.5% iga arvu jaoks
@@ -211,10 +301,13 @@ function Ylesanne(){
     
       if (arv1_juure_all<0 || arv2_juure_all<0){
         vastus="-"; // EI SAA JAGADA "vastus"
+        alt_vastused.push(vastus);
       } else if (arv1_juure_all*arv2_juure_all==0){
         vastus="0";
+        alt_vastused.push(vastus);
       } else if (arv1_juure_all>0 && arv2_juure_all>0){
         vastus=str(arv1*arv2);
+        alt_vastused.push(vastus);
       }
     
       if (arv1_juure_all<0){
@@ -225,15 +318,15 @@ function Ylesanne(){
       }
       
       antav_ylesanne="\\sqrt{"+ str(arv1_juure_all)+"}"+"\\cdot"+"\\sqrt{"+ str(arv2_juure_all)+"}"
-      vastus_kontrolliks=vastus;
-      console.log(vastus_kontrolliks)
+      console.log(alt_vastused)
   }
   
   
       // Jagamine ilusa vastusega (juured koos)
   if (mudeli_valik=="3"){
     
-      arv1=int(random(1,25));
+      alt_vastused=[];
+      arv1=int(random(0,25));
       arv2=int(random(1,25));
 
       mark1=random([1,1,1,1,1,1,1,-1]); // Miinuse esinemise tõenäosus on 12.5% iga arvu jaoks
@@ -242,27 +335,33 @@ function Ylesanne(){
     
       if (arv1_juure_all<0 || arv2*arv2==0 ){
         vastus="-"; // EI SAA juurida "vastus"
+        alt_vastused.push(vastus);
       } else if (arv1_juure_all==0){
         vastus="0";
+        alt_vastused.push(vastus);
       } else if (arv1_juure_all>0 ){
-        vastus=str((arv1)/(arv2));
-        console.log("arv1:"+arv1,"arv2: "+arv2,"vastus: "+vastus)
-        if (arv1/arv2!=int(arv1/arv2)){
-              if (str(vastus).split(".")[1].length>10){
-                arv1_taandatud=arv1;
-                arv2_taandatud=arv2;
-                // TAANDAMINE
-                    for (i=625; i>1; i--){
-                      if (arv1%i==0 && arv2%i==0){
-                        arv1_taandatud=arv1/i;
-                        arv2_taandatud=arv2/i;
-                        break
-                        
-                      }
-                    }
-                    vastus="("+str(arv1_taandatud)+")/("+str(arv2_taandatud)+")";
-              }
+        
+          if (Number.isInteger(arv1/arv2)==true){
+            vastus=str((arv1)/arv2);
+            alt_vastused.push(vastus);
+          } else {
+            if (str(arv1/arv2).split(".")[1].length<=3 ){
+              alt_vastused.push(str(arv1/arv2));
+            }
+          }
+        
+        arv1_vastuse_jaoks=arv1;
+        arv2_vastuse_jaoks=arv2;
+        
+        for (i=25;i>0;i--){
+          if (arv1_vastuse_jaoks%i==0 && arv2_vastuse_jaoks%i==0){
+            arv1_vastuse_jaoks=arv1_vastuse_jaoks/i;
+            arv2_vastuse_jaoks=arv2_vastuse_jaoks/i;
+          }
+          
         }
+        vastus_murd="("+str(arv1_vastuse_jaoks)+")/("+str(arv2_vastuse_jaoks)+")";
+        alt_vastused.push(vastus_murd);
       }
     
       if (mark1*arv1*arv1<0){
@@ -283,17 +382,16 @@ function Ylesanne(){
       ylesanded=random([yl_1, yl_2]);
     
       antav_ylesanne=ylesanded
-    
-      vastus_kontrolliks=vastus;
-      console.log(vastus_kontrolliks)
+      console.log(alt_vastused)
   }
   
   
         // Jagamine ilusa vastusega (juured eraldi)
   if (mudeli_valik=="4"){
     
-          arv1=int(random(0,25));
-          arv2=int(random(0,25));
+      arv1=int(random(0,25));
+      arv2=int(random(0,25));
+      alt_vastused=[];
 
       mark1=random([1,1,1,1,1,1,1,-1]); // Miinuse esinemise tõenäosus on 12.5% iga arvu jaoks
       mark2=random([1,1,1,1,1,1,1,-1]); // Miinuse esinemise tõenäosus on 12.5% iga arvu jaoks
@@ -301,29 +399,37 @@ function Ylesanne(){
       arv2_juure_all=mark2*arv2*arv2;
       if (arv1_juure_all<0 || arv2_juure_all<=0 ){
         vastus="-"; // EI SAA juurida "vastus"
+        alt_vastused.push(vastus);
       } else if (arv1_juure_all==0){
         vastus="0";
+        alt_vastused.push(vastus);
       } else if (arv1_juure_all>0 && arv2_juure_all>0){
-        vastus=str((arv1)/(arv2));
-        console.log("arv1:"+arv1,"arv2: "+arv2,"vastus: "+vastus)
-        if ((arv1/arv2)!=(int(arv1/arv2))){
-              if (str(vastus).split(".")[1].length>10){
-                arv1_taandatud=arv1;
-                arv2_taandatud=arv2;
-                // TAANDAMINE
-                    for (i=625; i>1; i--){
-                      if (arv1%i==0 && arv2%i==0){
-                        arv1_taandatud=arv1/i;
-                        arv2_taandatud=arv2/i;
-                        break
-                        
-                      }
-                    }
-                    vastus="("+str(arv1_taandatud)+")/("+str(arv2_taandatud)+")";
-              }
+        
+        if (Number.isInteger(arv1/arv2)==true){
+            vastus=str((arv1)/arv2);
+            alt_vastused.push(vastus);
+          } else {
+            if (str(arv1/arv2).split(".")[1].length<=3 ){
+              alt_vastused.push(str(arv1/arv2));
+            }
+          }
+        
+        arv1_vastuse_jaoks=arv1;
+        arv2_vastuse_jaoks=arv2;
+        
+        for (i=25;i>0;i--){
+          if (arv1_vastuse_jaoks%i==0 && arv2_vastuse_jaoks%i==0){
+            arv1_vastuse_jaoks=arv1_vastuse_jaoks/i;
+            arv2_vastuse_jaoks=arv2_vastuse_jaoks/i;
+          }
+          
         }
+        vastus_murd="("+str(arv1_vastuse_jaoks)+")/("+str(arv2_vastuse_jaoks)+")";
+        alt_vastused.push(vastus_murd);
+        
       }
     
+        
       if (mark1*arv1*arv1<0){
         lugeja_juures="("+str(mark1*arv1*arv1)+")";
       } else {
@@ -341,19 +447,17 @@ function Ylesanne(){
       ylesanded=random([yl_1, yl_2]);
     
       antav_ylesanne=ylesanded
-    
-      vastus_kontrolliks=vastus;
-      console.log(vastus_kontrolliks)
+      console.log(alt_vastused)
   }
-  
-  
+
   
           // Liitmine (juured koos)
   if (mudeli_valik=="5"){
     
+          alt_vastused=[];
           init_num1=int((random(2,10)));
           while (true){
-            init_num2=int(random(1,10)); 
+            init_num2=int(random(2,25));
             juur_arvust_2 = Math.sqrt(init_num2);
             if ( (int(juur_arvust_2)*int(juur_arvust_2)) !=init_num2){
                 break
@@ -365,12 +469,21 @@ function Ylesanne(){
           teine_arv=lahutaja;
           
           antav_ylesanne="\\sqrt{"+str(esimene_arv)+"+"+str(teine_arv)+"}"   
-          vastus_1 = "\sqrt("+str(esimene_arv+teine_arv)+")";
-          vastus_2 = str(init_num1)+"\sqrt("+str(init_num2)+")"
-    
-            
-      vastus_kontrolliks=vastus_2;
-      console.log(vastus_kontrolliks)
+          
+          // Juure all tegurdamise protsess  -----ALGUS
+          for (i=25;i>0;i--){
+            if ( init_num2%i==0 ){
+              if((int(Math.sqrt(i)))*(int(Math.sqrt(i)))==i){
+                init_num1=Math.sqrt(i)*init_num1;
+                init_num2=init_num2/i;
+              }
+            }
+          }
+          // Juure all tegurdamise protsess  ---- LÕPP 
+      
+          vastus = str(init_num1)+"\sqrt("+str(init_num2)+")";
+          alt_vastused.push(vastus);
+      console.log(alt_vastused);
   }
     
     
@@ -378,15 +491,15 @@ function Ylesanne(){
               // Liitmine (juured eraldi)
   if (mudeli_valik=="6"){
     
+    alt_vastused=[];
     arv1 = int(random(0,30))/2;
     arv2 = int(random(0,30))/2;
     
     antav_ylesanne="\\sqrt{"+str(arv1*arv1)+"}+\\sqrt{"+str(arv2*arv2)+"}";
     
     vastus=str(arv1+arv2);
-
-      vastus_kontrolliks=vastus;
-      console.log(vastus_kontrolliks)
+    alt_vastused.push(vastus);
+    console.log(alt_vastused)
   }
   
     
@@ -394,24 +507,25 @@ function Ylesanne(){
                   // Lahutamine (juured eraldi)
   if (mudeli_valik=="7"){
     
+    alt_vastused=[];
     arv1 = int(random(0,30))/2;
     arv2 = int(random(0,30))/2;
     
     antav_ylesanne="\\sqrt{"+str(arv1*arv1)+"}-\\sqrt{"+str(arv2*arv2)+"}";
     
     vastus=str(arv1-arv2);
-
-      vastus_kontrolliks=vastus;
-      console.log(vastus_kontrolliks)
+    alt_vastused.push(vastus);
+    console.log(alt_vastused);
   }
     
     
               // Lahutamine (juured koos)
   if (mudeli_valik=="8"){
     
+          alt_vastused=[];
           init_num1=int((random(2,10)));
           while (true){
-            init_num2=int(random(1,10)); 
+            init_num2=int(random(2,25)); 
             juur_arvust_2 = Math.sqrt(init_num2);
             if ( (int(juur_arvust_2)*int(juur_arvust_2)) !=init_num2){
                 break
@@ -422,24 +536,41 @@ function Ylesanne(){
           esimene_arv=summa_juure_all+liitja;
           teine_arv=liitja;
           
-          antav_ylesanne="\\sqrt{"+str(esimene_arv)+"-"+str(teine_arv)+"}"   
-          vastus_1 = "\sqrt("+str(esimene_arv+teine_arv)+")";
-          vastus_2 = str(init_num1)+"\sqrt("+str(init_num2)+")"
-    
+          antav_ylesanne="\\sqrt{"+str(esimene_arv)+"-"+str(teine_arv)+"}"
             
-      vastus_kontrolliks=vastus_2;
-      console.log(vastus_kontrolliks)
+          // Juure all tegurdamise protsess  -----ALGUS
+          for (i=25;i>0;i--){
+            if ( init_num2%i==0 ){
+              if((int(Math.sqrt(i)))*(int(Math.sqrt(i)))==i){
+                init_num1=Math.sqrt(i)*init_num1;
+                init_num2=init_num2/i;
+              }
+            }
+          }
+          // Juure all tegurdamise protsess  ---- LÕPP
+            
+          vastus = str(init_num1)+"\sqrt("+str(init_num2)+")"
+          alt_vastused.push(vastus);
+          console.log(alt_vastused);
   }
-    
-    
-    
-  
   
     //console.log(antav_ylesanne)
     // console.log(vastus_kontrolliks)
    tex_string=antav_ylesanne+"=";
    katex.render( tex_string, tex_v6rrand.elt);
-  
+
+        
+  // Strip alt_vastused. Ehk eemaldame sulud.
+  stripped_alt=[];
+  for (i=0; i<= alt_vastused.length-1 ; i++){
+    stripped_alt.push(alt_vastused[i].replace(/([()])/g, ''));
+  }
+    
+  // Lisame tühikud alt vastuste järele, et tekst oleks loetavam.
+  for (i=0; i<=stripped_alt.length-1; i++){
+    stripped_alt[i]=" "+stripped_alt[i];
+  }
+    
   
 }
 
@@ -455,7 +586,7 @@ function write_texts(){
   // MathQuill_v6rrand.parent(tex_v6rrand)
   // MathQuill_v6rrand.style("width: 80%; float: right; font-size: 24px; margin: 30px auto;");
   
-  MathQuill_v6rrand.style(" width: 80%; margin-top: 70px auto; font-size: 24px");
+  MathQuill_v6rrand.style(" width: 80%; margin-top: 70px auto; font-size: 24px;")
   MathQuill_v6rrand.position(width/asukoha_nr+0,height/asukoha_nr+190);
   
   yl_text=createP("");
@@ -470,11 +601,22 @@ function write_texts(){
 
 function kontroll(){
   sisu=document.getElementById("lihtsam").textContent;
-  //console.log("KONTROLL: ")
-console.log("MQ sisu: ", sisu);
-     
-       //console.log("Vastus võrdlemiseks: ", vastus_kontrolliks)
-           if (str(sisu) == vastus_kontrolliks && str(sisu).length>0){
+  //console.log("KONTROLL: ");
+// console.log("MQ sisu: ", sisu);
+//   console.log(alt_vastused);
+
+ 
+  for (i=0; i<=alt_vastused.length-1;i++){
+    if (vastused_korras==true){
+      break
+    }
+    if(sisu==alt_vastused[i]){
+      vastused_korras=true;
+    }else{
+      vastused_korras=false;
+    }
+  }
+           if (vastused_korras==true){
               tulemus.html("Õige!");
               tulemus.style("color","green");
               KONTROLL_NUPP.attribute("disabled","");
