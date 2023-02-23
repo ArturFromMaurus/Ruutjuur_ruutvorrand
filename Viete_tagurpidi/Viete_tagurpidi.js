@@ -194,6 +194,7 @@ if (INPUT_x1.value()=="" || INPUT_x2.value()==""){
     }else if ( (INPUT_x1.value()==b && INPUT_x2.value()==c)  ){
     tulemus.html("Korras!");
     tulemus.style("color","green");
+    oige_vastus=oige_vastus+1;
     KONTROLL_NUPP.attribute("disabled","");
     
   }else {
