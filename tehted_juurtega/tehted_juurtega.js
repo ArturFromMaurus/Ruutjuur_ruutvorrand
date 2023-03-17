@@ -12,32 +12,10 @@ var l6petamise_tingimus=false;
 var alt_vastused=[];
 var vastused_korras=false;
 
+window.onload = function() {
+  // ----------------------------------------- HTML ToolTip ------------------------------------------
 
-
-
-// ----------------------------------------- MATHQUILL KRAAM-----------------------------------------
-var MQ = MathQuill.getInterface(2);
-var answerSpan = document.getElementById('answer');
-answerSpan.style.backgroundColor="white";
-answerSpan.style.width="10px"
-var latexSpan = document.getElementById('lihtsam');
-var latexTEXT = document.getElementById('latex');
-var answerMathField = MQ.MathField(answerSpan, {
-                handlers: {
-                edit: function() {
-                    var enteredMath = answerMathField.latex();
-                    latexSpan.textContent = answerMathField.text()// Get entered math in LaTeX format   
-                    latexTEXT.textContent=answerMathField.latex();
-                }
-                }
-            });
-// ----------------------------------------- MATHQUILL KRAAM-----------------------------------------
-
-
-
-// ----------------------------------------- HTML ToolTip -------------------------------------------
-
-var tooltip = document.createElement("div");
+tooltip = document.createElement("div");
 tooltip.style.backgroundColor = "rgba(9,9,96,0.95)"
 tooltip.style.color = "white";
 tooltip.style.borderRadius="25px";
@@ -49,19 +27,19 @@ tooltip.style.border="solid 2px black";
 tooltip.style.width="540px"
 document.body.appendChild(tooltip);
 
-var regularText = document.createElement("div");
+regularText = document.createElement("div");
 regularText.innerHTML = "Kui arv ei ole ilusti juuritav, siis jaota juurealune teguriteks. Tegurite seast peaks üks tegur olema kindlasti juuritav. Õigeks loetakse sellist vastust, kus juure alune arv ei ole enam tegurduv.<br><br>Ruutjuure sümboli sisestamiseks kasuta ruutjuure nupu või trükki tekstivälja \\sqrt ning vajuta tühikut või enterit. Murrujoone sisestamiseks kasuta / (kaldkriips) sümbolit.<br><br>";
 regularText.style.fontFamily="Computer Modern";
 regularText.style.fontSize="20px";
 tooltip.appendChild(regularText);
 
 KaTeX_EQ="\\text{Näiteks. Ruutjuure } \\sqrt{96} \\text{ täpne väärtus: } \\sqrt{96}=\\sqrt{16 \\cdot 6}=4 \\sqrt{6}"
-var katexEquation = document.createElement("div");
+katexEquation = document.createElement("div");
 tooltip.appendChild(katexEquation);
 
 
 // Info nuppu funktsionaalsus
-var infoNupp = document.createElement("button");
+infoNupp = document.createElement("button");
 infoNupp.innerHTML = "i";
 infoNupp.style.position = "absolute";
 infoNupp.style.margin="20px";
@@ -87,7 +65,31 @@ infoNupp.addEventListener("mouseleave", function() {
   infoNupp.style.background="transparent"
 });
 
-// ----------------------------------------- HTML ToolTip -------------------------------------------
+// ----------------------------------------- HTML ToolTip -------------------------------------------  
+  
+};
+
+
+
+// ----------------------------------------- MATHQUILL KRAAM-----------------------------------------
+var MQ = MathQuill.getInterface(2);
+var answerSpan = document.getElementById('answer');
+answerSpan.style.backgroundColor="white";
+answerSpan.style.width="10px"
+var latexSpan = document.getElementById('lihtsam');
+var latexTEXT = document.getElementById('latex');
+var answerMathField = MQ.MathField(answerSpan, {
+                handlers: {
+                edit: function() {
+                    var enteredMath = answerMathField.latex();
+                    latexSpan.textContent = answerMathField.text()// Get entered math in LaTeX format   
+                    latexTEXT.textContent=answerMathField.latex();
+                }
+                }
+            });
+// ----------------------------------------- MATHQUILL KRAAM-----------------------------------------
+
+
 
 
 
@@ -657,8 +659,6 @@ function L6pp(){
   yl_text.remove();
   tulemus.remove();
   
-  infoNupp.remove();
-
   RESET_NUPP.remove();
   L6PETA_NUPP.remove();
   KONTROLL_NUPP.remove();
