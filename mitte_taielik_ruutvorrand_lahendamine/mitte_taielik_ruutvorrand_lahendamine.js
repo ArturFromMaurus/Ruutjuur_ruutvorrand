@@ -14,6 +14,66 @@ var alt_vastused2=[];
 
 var vastused_korras=false;
 
+
+
+window.onload = function() {
+  // ----------------------------------------- HTML ToolTip ------------------------------------------
+
+tooltip = document.createElement("div");
+tooltip.style.backgroundColor = "rgba(9,9,96,0.95)"
+tooltip.style.color = "white";
+tooltip.style.borderRadius="25px";
+tooltip.style.padding = "10px";
+tooltip.style.position = "absolute";
+tooltip.style.display = "none";
+tooltip.style.zIndex="1";
+tooltip.style.border="solid 2px black";
+tooltip.style.width="540px"
+document.body.appendChild(tooltip);
+
+regularText = document.createElement("div");
+regularText.innerHTML = "Vastuseid saab sisestada täisarvudena, lõplike kümnendmurdudena (3 komakohta max) ning harilike murdudena. Murrujoone sisestamiseks kasuta / (kaldkriips) sümbolit. Segaarvu asemel sisesta liigmurd.<br><br>";
+regularText.style.fontFamily="Computer Modern";
+regularText.style.fontSize="20px";
+tooltip.appendChild(regularText);
+
+KaTeX_EQ="\\text{Näiteks kui soovid kirjutada murdu } \\dfrac{a}{b} \\text{ siis tuleb trükkida a/b}."
+katexEquation = document.createElement("div");
+tooltip.appendChild(katexEquation);
+
+
+// Info nuppu funktsionaalsus
+infoNupp = document.createElement("button");
+infoNupp.innerHTML = "i";
+infoNupp.style.position = "absolute";
+infoNupp.style.margin="20px";
+infoNupp.style.padding="5px 12px";
+infoNupp.style.fontSize="20px";
+infoNupp.style.fontWeight="bold";
+infoNupp.style.fontFamily="Hoefler Text";
+infoNupp.style.fontStyle="italic";
+infoNupp.style.background="transparent";
+infoNupp.style.border="solid 2px black";
+infoNupp.style.borderRadius="50%";
+document.body.appendChild(infoNupp);
+
+infoNupp.addEventListener("mouseenter", function() {
+  tooltip.style.left = (infoNupp.offsetLeft + infoNupp.offsetWidth) + "px";
+  tooltip.style.top = (infoNupp.offsetTop + infoNupp.offsetHeight) + "px";
+  infoNupp.style.background="darkgrey"
+  tooltip.style.display = "block";
+});
+
+infoNupp.addEventListener("mouseleave", function() {
+  tooltip.style.display = "none";
+  infoNupp.style.background="transparent"
+});
+
+// ----------------------------------------- HTML ToolTip -------------------------------------------  
+  
+};
+
+
 // ----------------------------------------- MATHQUILL KRAAM-----------------------------------------
 var MQ = MathQuill.getInterface(2);
 var answerSpan = document.getElementById('answer');
@@ -48,60 +108,6 @@ var answerMathField2 = MQ.MathField(answerSpan2, {
 // ----------------------------------------- MATHQUILL KRAAM-----------------------------------------
 
 
-
-// ----------------------------------------- HTML ToolTip -------------------------------------------
-
-var tooltip = document.createElement("div");
-tooltip.style.backgroundColor = "rgba(9,9,96,0.95)"
-tooltip.style.color = "white";
-tooltip.style.borderRadius="25px";
-tooltip.style.padding = "10px";
-tooltip.style.position = "absolute";
-tooltip.style.display = "none";
-tooltip.style.zIndex="1";
-tooltip.style.border="solid 2px black";
-tooltip.style.width="540px"
-document.body.appendChild(tooltip);
-
-var regularText = document.createElement("div");
-regularText.innerHTML = "Vastuseid saab sisestada täisarvudena, lõplike kümnendmurdudena (3 komakohta max) ning harilike murdudena. Murrujoone sisestamiseks kasuta / (kaldkriips) sümbolit. Segaarvu asemel sisesta liigmurd.<br><br>";
-regularText.style.fontFamily="Computer Modern";
-regularText.style.fontSize="20px";
-tooltip.appendChild(regularText);
-
-KaTeX_EQ="\\text{Näiteks kui soovid kirjutada murdu } \\dfrac{a}{b} \\text{ siis tuleb trükkida a/b}."
-var katexEquation = document.createElement("div");
-tooltip.appendChild(katexEquation);
-
-
-// Info nuppu funktsionaalsus
-var infoNupp = document.createElement("button");
-infoNupp.innerHTML = "i";
-infoNupp.style.position = "absolute";
-infoNupp.style.margin="20px";
-infoNupp.style.padding="5px 12px";
-infoNupp.style.fontSize="20px";
-infoNupp.style.fontWeight="bold";
-infoNupp.style.fontFamily="Hoefler Text";
-infoNupp.style.fontStyle="italic";
-infoNupp.style.background="transparent";
-infoNupp.style.border="solid 2px black";
-infoNupp.style.borderRadius="50%";
-document.body.appendChild(infoNupp);
-
-infoNupp.addEventListener("mouseenter", function() {
-  tooltip.style.left = (infoNupp.offsetLeft + infoNupp.offsetWidth) + "px";
-  tooltip.style.top = (infoNupp.offsetTop + infoNupp.offsetHeight) + "px";
-  infoNupp.style.background="darkgrey"
-  tooltip.style.display = "block";
-});
-
-infoNupp.addEventListener("mouseleave", function() {
-  tooltip.style.display = "none";
-  infoNupp.style.background="transparent"
-});
-
-// ----------------------------------------- HTML ToolTip -------------------------------------------
 
 
 function windowResized() {
